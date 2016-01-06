@@ -1,6 +1,6 @@
 # WIP: @ngrx/store Best Practices
 
- - [Normalizr](https://github.com/gaearon/normalizr) & [https://facebook.github.io/immutable-js/](ImmutableJS)
+ - [Normalizr](https://github.com/gaearon/normalizr) & [ImmutableJS](https://facebook.github.io/immutable-js/)
  - ["Smart" & "Dumb" Components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0#.d2pgf7r58)
  - [<code>AsyncPipe</code>](https://angular.io/docs/ts/latest/guide/pipes.html#!#the-stateful-asyncpipe-) to handle subscription to Observables
  - Store is never exposed and only used privately inside services to dispatch Actions
