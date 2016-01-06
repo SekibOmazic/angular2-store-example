@@ -106,23 +106,27 @@ export class Users {
 	    }, []);
 	  });
 
-	  this.actions$.filter(action => action.type === ADD_USER)
+	  let adds = this.actions$.filter(action => action.type === ADD_USER)
 	    .do(() => this._store.dispatch({type: ADDING_USER}))
 	    .mergeMap(action => this._http.post(this._url, JSON.stringify(action.payload)))
       .map((res: Response) => res.json())
-	    .subscribe(data => this._store.dispatch({type: ADDED_USER, payload: data}));
+      .map(data => ({type: ADDED_USER, payload: data}));
 
-    this.actions$.filter(action => action.type === LOAD_USERS)
+    let loads = this.actions$.filter(action => action.type === LOAD_USERS)
 	    .do(() => this._store.dispatch({type: LOADING_USERS}))
       .mergeMap(action => this._http.get(this._url))
       .map((res: Response) => res.json())
-	    .subscribe(data => this._store.dispatch({type: LOADED_USERS, payload: data}));
+      .map(data => ({type: LOADED_USERS, payload: data}));
 
-	  this.actions$.filter(action => action.type === DELETE_USER && ! action.payload.deleting)
+	  let deletes = this.actions$.filter(action => action.type === DELETE_USER && ! action.payload.deleting)
 	    .do(action => this._store.dispatch({type: DELETING_USER, payload: action.payload}))
       .mergeMap(action => this._http.delete(`${this._url}/${action.payload.id}`))
       .map((res: Response) => res.json())
-	    .subscribe(data => this._store.dispatch({type: DELETED_USER, payload: data}));
+      .map(data => ({type: DELETED_USER, payload: data}));
+	    
+    Observable
+	    .merge(adds, loads, deletes)
+	    .subscribe(action => this._store.dispatch(action));
 
     this.loadUsers();
   }
