@@ -1,0 +1,3 @@
+<li [class.deleting]="user.deleting">
+  ID: {{user.id}} - {{user.name}} - {{user.email}} <button (click)="deleteUser.emit(user)">&times;</button>
+</li>

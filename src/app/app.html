@@ -1,0 +1,32 @@
+<div>
+  <h2>WIP: @ngrx/store Best Practices</h2>
+  <p>
+    <em>
+      There is an intentional 500ms delay added to the API calls to make
+      the transitional states show up more clearly.
+    </em>
+  </p>
+  <p><strong>Architectural Decisions</strong></p>
+  <ul>
+    <li>
+      <a
+          href="https://github.com/gaearon/normalizr"
+          target="_blank">
+        Normalizr
+      </a> &
+      <a
+          href="https://facebook.github.io/immutable-js/"
+          target="_blank">
+        ImmutableJS
+      </a>
+    </li>
+    <li>
+      <a
+          href="https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0#.d2pgf7r58" target="_blank">"Smart" and "Dumb" Components</a></li>
+    <li><a href="https://angular.io/docs/ts/latest/guide/pipes.html#!#the-stateful-asyncpipe-" target="_blank"><code>AsyncPipe</code></a> to handle subscription to Observables</li>
+    <li>Store is never exposed and only used privately inside services to dispatch Actions</li>
+    <li>Splice up the store using RxJS Operators (i.e. <code>Users.users$</code>, <code>Users.loading$</code>, <code>Users.adding$</code>) for easier consumption in Smart Components</li>
+  </ul>
+  <hr />
+  <users-list></users-list>
+</div>

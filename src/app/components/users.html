@@ -1,0 +1,10 @@
+<p><button (click)="reloadUsers.emit()">Trigger Reload</button></p>
+<input #name type="text" placeholder="Name"> <input #email type="email" placeholder="Email">
+<button
+    (click)="addUser.emit({name: name.value, email: email.value}); name.value = ''; email.value = '';">
+  Add User
+</button> <span *ngIf="adding"><strong>Adding User...</strong></span>
+<h5 *ngIf="loading">Recieving Users...</h5>
+<ul>
+  <user *ngFor="#user of users" [user]="user" (deleteUser)="deleteUser.emit($event)"></user>
+</ul>
