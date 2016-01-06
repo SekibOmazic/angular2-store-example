@@ -123,10 +123,10 @@ export class Users {
       .mergeMap(action => this._http.delete(`${this._url}/${action.payload.id}`))
       .map((res: Response) => res.json())
       .map(data => ({type: DELETED_USER, payload: data}));
-	    
+
     Observable
 	    .merge(adds, loads, deletes)
-	    .subscribe(action => this._store.dispatch(action));
+	    .subscribe((action: Action) => this._store.dispatch(action));
 
     this.loadUsers();
   }
