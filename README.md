@@ -9,12 +9,11 @@
 ### Quick start
 
 ```bash
-# clone our repo
-# --depth 1 removes all but one .git commit history
-git clone --depth 1 https://github.com/meenie/angular2-store-example.git
+# clone the repo
+git clone git@github.com:meenie/angular2-store-example.git
 
 # change directory to our repo
-cd angular2-webpack-starter
+cd angular2-store-example
 
 # install the repo with npm
 npm install
