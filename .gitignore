@@ -58,3 +58,6 @@ Thumbs.db
 # IDE #
 .idea/
 *.swp
+
+# json-server db file #
+db.json
