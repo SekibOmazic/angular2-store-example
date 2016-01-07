@@ -1,5 +1,5 @@
 import {Injectable} from 'angular2/core';
-import {Http, Response} from 'angular2/http';
+import {Http, Headers, Response} from 'angular2/http';
 import {Action, Reducer, Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/subject/BehaviorSubject';
@@ -70,8 +70,8 @@ export class Users {
         return state.setIn(['entities', 'users', action.payload.id, 'deleting'], true);
       case DELETED_USER:
         return state.withMutations(map => map
-          .deleteIn(['entities', 'users', action.payload.id])
-          .deleteIn(['result', map.get('result').indexOf(action.payload.id)])
+          .deleteIn(['entities', 'users', action.payload])
+          .deleteIn(['result', map.get('result').indexOf(action.payload)])
         );
       case ADDING_USER:
         return state.set('adding', true);
@@ -91,10 +91,11 @@ export class Users {
   users$: Observable<Map<String, any>>;
 
   private actions$ = new BehaviorSubject<Action>({type: null, payload: null});
-  private _url: string = 'http://angular2-ngrx-store.getsandbox.com/users';
+  private _url: string = 'http://localhost:3100/users';
 
   constructor(private _store: Store<any>, private _http: Http) {
 	  const store$ = this._store.select<IUsers>('Users');
+    const headers = new Headers({'Content-Type': 'application/json'});
 
 	  this.loading$ = store$.map(data => data.get('loading'));
 	  this.adding$ = store$.map(data => data.get('adding'));
@@ -108,7 +109,8 @@ export class Users {
 
 	  let adds = this.actions$.filter(action => action.type === ADD_USER)
 	    .do(() => this._store.dispatch({type: ADDING_USER}))
-	    .mergeMap(action => this._http.post(this._url, JSON.stringify(action.payload)))
+	    .mergeMap(action =>
+        this._http.post(this._url, JSON.stringify(action.payload), {headers}))
       .map((res: Response) => res.json())
       .map(data => ({type: ADDED_USER, payload: data}));
 
@@ -118,11 +120,14 @@ export class Users {
       .map((res: Response) => res.json())
       .map(data => ({type: LOADED_USERS, payload: data}));
 
-	  let deletes = this.actions$.filter(action => action.type === DELETE_USER && ! action.payload.deleting)
-	    .do(action => this._store.dispatch({type: DELETING_USER, payload: action.payload}))
-      .mergeMap(action => this._http.delete(`${this._url}/${action.payload.id}`))
-      .map((res: Response) => res.json())
-      .map(data => ({type: DELETED_USER, payload: data}));
+    let deletes = this.actions$.filter(action => action.type === DELETE_USER)
+      .filter(action => ! action.payload.deleting)
+      .do(action => this._store.dispatch({type: DELETING_USER, payload: action.payload}))
+      .mergeMap(
+        action => this._http.delete(`${this._url}/${action.payload.id}`),
+        action => action.payload.id
+      )
+      .map(userId => ({type: DELETED_USER, payload: userId}));
 
     Observable
 	    .merge(adds, loads, deletes)

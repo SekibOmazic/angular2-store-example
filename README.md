@@ -18,9 +18,6 @@ cd angular2-store-example
 # install the repo with npm
 npm install
 
-# install TypeScript typings
-./node_modules/.bin/typings install
-
 # start the server
 npm start
 ```
@@ -29,6 +26,7 @@ go to [http://0.0.0.0:3000](http://0.0.0.0:3000) in your browser
 # Table of Contents
 * [File Structure](#file-structure)
 * [Getting Started](#getting-started)
+    * [Backend](#backend)
     * [Dependencies](#dependencies)
     * [Installing](#installing)
     * [Running the app](#running-the-app)
@@ -76,6 +74,13 @@ angular2-webpack-starter/
 ```
 
 # Getting Started
+## Backend
+This project uses [json-server](https://github.com/typicode/json-server) as an API to help with
+CRUD operations on the front-end.  Please read the documentation in the provided link to learn
+more on how you can use it.  After running `npm install`, there is a `postinstall` script which
+will generate the file called `db.json` with some seeded data.  Change this all you like, it has
+been `.gitignore`d.
+
 ## Dependencies
 What you need to run this app:
 * `node` and `npm` (`brew install node`)
@@ -94,15 +99,21 @@ Once you have those, you should install these globals with `npm install --global
 * `clone` your fork
 * `npm install` to install all dependencies
 * `typings install` to install necessary typings
-* `npm run server` to start the dev server in another tab
+* `npm start` to start the dev server in another tab
 
 ## Running the app
-After you have installed all dependencies you can now run the app. Run `npm run server` to start a local server using `webpack-dev-server` which will watch, build (in-memory), and reload for you. The port will be displayed to you as `http://0.0.0.0:3000` (or if you prefer IPv6, if you're using `express` server, then it's `http://[::1]:3000/`).
+After you have installed all dependencies you can now run the app. Run `npm start` to start a local server using `webpack-dev-server` which will watch, build (in-memory), and reload for you. The port will be displayed to you as `http://0.0.0.0:3000`.
+
+There are a couple of environment variables you can set to change some of the server settings:
+ - `PORT`: Port to run the server on. Default is: `3000`
+ - `JSON_SERVER_DB`: File to use for `json-server`. Default is: `db.json`
+ - `JSON_SERVER_PORT`: Port to run `json-server` on.  Default is: `3100`
+ - `JSON_SERVER_DELAY`: How much delay each `json-server` API call has. Default is: `100`
 
 ### server
 ```bash
 # development
-npm run server
+npm start
 # production
 npm run build:prod
 npm run server:prod
