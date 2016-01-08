@@ -20,6 +20,7 @@ export class UsersComponent {
   @Input() adding;
   @Output() addUser = new EventEmitter(false);
   @Output() deleteUser = new EventEmitter(false);
+  @Output() updateUser = new EventEmitter(false);
   @Output() reloadUsers = new EventEmitter(false);
 
   ngOnInit() {

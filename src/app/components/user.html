@@ -1,3 +1,13 @@
 <li [class.deleting]="user.deleting">
-  ID: {{user.id}} - {{user.name}} - {{user.email}} <button (click)="deleteUser.emit(user)">&times;</button>
+  <form (submit)="update(name, email)">
+    <span (dblclick)="toggle(name, email)" [hidden]="editMode">ID: {{user.id}} - {{user.name}} - {{user.email}}</span>
+    <button (click)="deleteUser.emit(user)" [hidden]="editMode">&times;</button>
+
+    <input #name  [class.hide]="!editMode" type="text"  placeholder="Name">
+    <input #email [class.hide]="!editMode" type="email" placeholder="Email">
+    <div [hidden]="!editMode">
+      <button type="submit">Save</button>
+      <a (click)="toggle(name, email)">cancel</a>
+    </div>
+  </form>
 </li>

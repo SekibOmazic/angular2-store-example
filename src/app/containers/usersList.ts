@@ -14,6 +14,7 @@ import {UsersComponent} from '../components/users';
         [adding]="users.adding$ | async"
         (addUser)="users.addUser($event)"
         (deleteUser)="users.deleteUser($event)"
+        (updateUser)="users.updateUser($event)"
         (reloadUsers)="users.reloadUsers()">
     </users>
   `,

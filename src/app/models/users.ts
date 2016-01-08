@@ -15,6 +15,9 @@ const ADDED_USER = 'ADDED_USER';
 const DELETE_USER = 'DELETE_USER';
 const DELETING_USER = 'DELETING_USER';
 const DELETED_USER = 'DELETED_USER';
+const UPDATING_USER = 'UPDATING_USER';
+const UPDATED_USER = 'UPDATED_USER';
+const UPDATE_USER = 'UPDATE_USER';
 
 const userSchema = new Schema('users');
 const UserRecord = Record({
@@ -24,7 +27,7 @@ const UserRecord = Record({
   deleting: false
 });
 
-interface IUser {
+export interface IUser {
   id: string;
   name: string;
   email: string;
@@ -81,6 +84,12 @@ export class Users {
           .update('result', list => list.push(action.payload.id))
           .set('adding', false)
         );
+      case UPDATING_USER:
+        return state.set('updating', true);
+      case UPDATED_USER:
+        return state
+          .setIn(['entities', 'users', action.payload.id], new UserRecord(action.payload));
+
       default:
         return state;
     }
@@ -129,8 +138,17 @@ export class Users {
         (action, res: Response) => ({type: DELETED_USER, payload: action.payload.id})
       );
 
+    let updates = this.actions$.filter(action => action.type === UPDATE_USER)
+      .do(action => console.log('will update user', action.payload))
+      .do(action => this._store.dispatch({type: UPDATING_USER, payload: action.payload}))
+      .mergeMap(
+        action =>
+          this._http.put(`${this._url}/${action.payload.id}`, JSON.stringify(action.payload), {headers}),
+        (action, res: Response) => ({type: UPDATED_USER, payload: res.json()})
+      );
+
     Observable
-	    .merge(adds, loads, deletes)
+	    .merge(adds, loads, deletes, updates)
 	    .subscribe((action: Action) => this._store.dispatch(action));
 
     this.loadUsers();
@@ -146,6 +164,10 @@ export class Users {
 
   loadUsers() {
     this.actions$.next({type: LOAD_USERS});
+  }
+
+  updateUser(user) {
+    this.actions$.next({type: UPDATE_USER, payload: user});
   }
 
   reloadUsers() {
