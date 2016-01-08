@@ -67,8 +67,6 @@ export class Users {
             );
           });
         });
-      //case DELETING_USER:
-      //  return state.setIn(['entities', 'users', action.payload.id, 'deleting'], true);
       case DELETED_USER:
         return state.withMutations(map => map
           .deleteIn(['entities', 'users', action.payload])
@@ -82,10 +80,7 @@ export class Users {
           .update('result', list => list.push(action.payload.id))
           .set('adding', false)
         );
-      //case UPDATING_USER:
-      //  return state.setIn(['entities', 'users', action.payload.id, 'updating'], true);
       case UPDATED_USER:
-        //action.payload.updating = false;
         return state
           .setIn(['entities', 'users', action.payload.id], new UserRecord(action.payload));
 
