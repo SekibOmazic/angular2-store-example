@@ -1,7 +1,8 @@
-<li [class.deleting]="user.deleting">
+<li [class.deleting]="deleting">
   <form (submit)="update(name, email)">
     <span (dblclick)="toggle(name, email)" [hidden]="editMode">ID: {{user.id}} - {{user.name}} - {{user.email}}</span>
-    <button (click)="deleteUser.emit(user)" [hidden]="editMode">&times;</button>
+    <button (click)="remove(user)" [hidden]="editMode">&times;</button>
+    <span *ngIf="updating"><strong>Updating ...</strong></span>
 
     <input #name  [class.hide]="!editMode" type="text"  placeholder="Name">
     <input #email [class.hide]="!editMode" type="email" placeholder="Email">

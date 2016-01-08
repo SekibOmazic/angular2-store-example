@@ -23,15 +23,13 @@ const userSchema = new Schema('users');
 const UserRecord = Record({
   id: null,
   name: null,
-  email: null,
-  deleting: false
+  email: null
 });
 
 export interface IUser {
   id: string;
   name: string;
   email: string;
-  deleting: boolean;
 }
 
 interface IUsers extends Map<String, any> {
@@ -69,8 +67,8 @@ export class Users {
             );
           });
         });
-      case DELETING_USER:
-        return state.setIn(['entities', 'users', action.payload.id, 'deleting'], true);
+      //case DELETING_USER:
+      //  return state.setIn(['entities', 'users', action.payload.id, 'deleting'], true);
       case DELETED_USER:
         return state.withMutations(map => map
           .deleteIn(['entities', 'users', action.payload])
@@ -84,9 +82,10 @@ export class Users {
           .update('result', list => list.push(action.payload.id))
           .set('adding', false)
         );
-      case UPDATING_USER:
-        return state.set('updating', true);
+      //case UPDATING_USER:
+      //  return state.setIn(['entities', 'users', action.payload.id, 'updating'], true);
       case UPDATED_USER:
+        //action.payload.updating = false;
         return state
           .setIn(['entities', 'users', action.payload.id], new UserRecord(action.payload));
 
@@ -131,19 +130,16 @@ export class Users {
       );
 
     let deletes = this.actions$.filter(action => action.type === DELETE_USER)
-      .filter(action => ! action.payload.deleting)
-      .do(action => this._store.dispatch({type: DELETING_USER, payload: action.payload}))
       .mergeMap(
         action => this._http.delete(`${this._url}/${action.payload.id}`),
         (action, res: Response) => ({type: DELETED_USER, payload: action.payload.id})
       );
 
     let updates = this.actions$.filter(action => action.type === UPDATE_USER)
-      .do(action => console.log('will update user', action.payload))
-      .do(action => this._store.dispatch({type: UPDATING_USER, payload: action.payload}))
       .mergeMap(
-        action =>
-          this._http.put(`${this._url}/${action.payload.id}`, JSON.stringify(action.payload), {headers}),
+        action => this._http.put(`${this._url}/${action.payload.id}`,
+                                  JSON.stringify(action.payload),
+                                  {headers}),
         (action, res: Response) => ({type: UPDATED_USER, payload: res.json()})
       );
 
@@ -158,7 +154,7 @@ export class Users {
     this.actions$.next({type: ADD_USER, payload: user});
   }
 
-  deleteUser(user) {
+  deleteUser(user: IUser) {
     this.actions$.next({type: DELETE_USER, payload: user});
   }
 
@@ -166,7 +162,7 @@ export class Users {
     this.actions$.next({type: LOAD_USERS});
   }
 
-  updateUser(user) {
+  updateUser(user: IUser) {
     this.actions$.next({type: UPDATE_USER, payload: user});
   }
 
