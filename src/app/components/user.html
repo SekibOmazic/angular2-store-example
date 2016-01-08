@@ -4,8 +4,8 @@
     <button (click)="remove(user)" [hidden]="editMode">&times;</button>
     <span *ngIf="updating"><strong>Updating ...</strong></span>
 
-    <input #name  [class.hide]="!editMode" type="text"  placeholder="Name">
-    <input #email [class.hide]="!editMode" type="email" placeholder="Email">
+    <input #name  [class.hide]="!editMode" type="text"  placeholder="Name" required>
+    <input #email [class.hide]="!editMode" type="email" placeholder="Email" required>
     <div [hidden]="!editMode">
       <button type="submit">Save</button>
       <a (click)="toggle(name, email)">cancel</a>

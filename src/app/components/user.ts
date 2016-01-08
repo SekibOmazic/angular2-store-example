@@ -36,16 +36,8 @@ export class UserComponent {
 
   update(name, email): boolean {
     if (name.value.length > 0 && email.value.length > 0) {
-      let newUser = {
-        id: this.user.id,
-        name: name.value,
-        email: email.value,
-        deleting: false,
-        updating: false
-      };
-
       this.updating = true;
-      this.updateUser.emit(newUser);
+      this.updateUser.emit({id: this.user.id, name: name.value, email: email.value});
       this.toggle(name, email);
     }
 
