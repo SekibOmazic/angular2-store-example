@@ -5,6 +5,6 @@
   Add User
 </button> <span *ngIf="adding"><strong>Adding User...</strong></span>
 <h5 *ngIf="loading">Recieving Users...</h5>
-<ul>
-  <user *ngFor="#user of users" [user]="user" (deleteUser)="deleteUser.emit($event)"></user>
+<ul *ngIf="! loading">
+  <users-list-item *ngFor="#user of users" [user]="user" (deleteUser)="deleteUser.emit($event)"></users-list-item>
 </ul>

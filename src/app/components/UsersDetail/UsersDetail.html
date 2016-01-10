@@ -1,0 +1,11 @@
+<h5 *ngIf="loading">Loading User...</h5>
+<div *ngIf="!loading">
+  <p>
+    ID: {{ user.id }} - {{ user.name }} - {{ user.email }}
+  </p>
+  <form [ngFormModel]="userForm" (submit)="patchUser.emit(userForm.value)">
+    <p>name <input ngControl="name"></p>
+    <p>email <input ngControl="email"></p>
+    <button [disabled]="! userForm.valid">save</button>
+  </form>
+</div>
