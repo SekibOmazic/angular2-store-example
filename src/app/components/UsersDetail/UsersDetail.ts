@@ -28,9 +28,9 @@ export class UsersDetail {
 
   ngOnInit() {
     this.userForm = this.builder.group({
-      id: [this.user.id],
-      name: [this.user.name, Validators.required],
-      email: [this.user.email, Validators.required]
+      id: [''],
+      name: ['', Validators.required],
+      email: ['', Validators.required]
     });
   }
 }
