@@ -117,7 +117,7 @@ export class Users {
     id = parseInt(id, 10);
     this.actions$.next({type: LOAD_USER, payload: id});
     return this.users$
-      .map(data => data.find(item => item.id === id));
+      .map(data => data.find(item => item.id === id) || {});
   }
 
   patchUser(user) {

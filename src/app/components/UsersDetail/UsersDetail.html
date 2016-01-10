@@ -4,8 +4,9 @@
     ID: {{ user.id }} - {{ user.name }} - {{ user.email }}
   </p>
   <form [ngFormModel]="userForm" (submit)="patchUser.emit(userForm.value)">
-    <p>name <input ngControl="name"></p>
-    <p>email <input ngControl="email"></p>
+    <input type="hidden" ngControl="id" [ngModel]="user.id">
+    <p>name <input [ngModel]="user.name" ngControl="name"></p>
+    <p>email <input [ngModel]="user.email" ngControl="email"></p>
     <button [disabled]="! userForm.valid">save</button>
   </form>
 </div>
